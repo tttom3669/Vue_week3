@@ -30,13 +30,16 @@ const app = {
                     window.location = 'login.html';
                 });
         },
+        // 取得產品資料
         getData() {
-            axios.get(`${this.apiUrl}/api/${this.apiPath}/admin/products/all`).then((res) => {
-                this.products = res.data.products;
-            }).catch((err) => {
-                alert(err.data.message);
-            });
+            axios.get(`${this.apiUrl}/api/${this.apiPath}/admin/products/all`)
+                .then((res) => {
+                    this.products = res.data.products;
+                }).catch((err) => {
+                    alert(err.data.message);
+                });
         },
+        // 更新產品資料
         updateProduct() {
             //新增產品
             let apiMethod = 'post';
@@ -53,17 +56,18 @@ const app = {
                 data: { data: { ...this.tempProduct } },
             }).then((res) => {
                 alert(res.data.message);
-                productModal.hide();
+                productModal.hide(); // 關閉產品頁面
                 this.getData();
             }).catch((err) => {
-
+                alert(err.data.message);
             });
         },
+        // 刪除產品資料
         delProduct() {
             axios.delete(`${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`)
                 .then((res) => {
                     alert(res.data.message);
-                    delProductModal.hide();
+                    delProductModal.hide(); // 關閉刪除頁面
                     this.getData();
                 }).catch((err) => {
                     alert(err.data.message);
@@ -81,22 +85,22 @@ const app = {
             }
             // 編輯產品頁面
             else if (type === 'update') {
-                this.tempProduct = { ...item };
+                this.tempProduct = { ...item }; // 取得欲編輯產品內容
                 this.isNew = false;
                 productModal.show();
             }
             // 刪除產品頁面 
             else if (type === 'delete') {
-                this.tempProduct = { ...item };
+                this.tempProduct = { ...item };// 取得欲刪除產品內容
                 delProductModal.show();
             }
         },
         //新增圖片
-        createImage(type) {
+        createImages(type) {
             if (type === 'init') {
                 this.tempProduct.imagesUrl = [];
             }
-            this.tempProduct.imagesUrl.push('');
+            this.tempProduct.imagesUrl.push(''); //多圖區增加存放圖片
         }
     },
     mounted() {

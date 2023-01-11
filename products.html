@@ -42,11 +42,11 @@
                 </thead>
                 <tbody>
                     <tr v-for="(product) in products">
-                        <td>{{product.category}}</td>
-                        <td>{{product.title}}</td>
-                        <td class="text-end">{{product.origin_price}}</td>
-                        <td class="text-end">{{product.price}}</td>
-                        <td>
+                        <td>{{product.category}}</td> <!--分類-->
+                        <td>{{product.title}}</td><!--產品名稱-->
+                        <td class="text-end">{{product.origin_price}}</td><!--原價-->
+                        <td class="text-end">{{product.price}}</td><!--售價-->
+                        <td><!--是否啟用-->
                             <span class="text-success" v-if="product.is_enabled">啟用</span>
                             <span v-else>未啟用</span>
                         </td>
@@ -83,6 +83,7 @@
                             <div class="col-sm-4">
                                 <div class="mb-2">
                                     <div class="mb-3">
+                                        <!-- 主要圖片(單圖) -->
                                         <label for="imageUrl" class="form-label">主要圖片</label>
                                         <input type="text" class="form-control" placeholder="請輸入圖片連結"
                                             v-model="tempProduct.imageUrl">
@@ -90,6 +91,7 @@
                                     <img class="img-fluid" :src="tempProduct.imageUrl">
                                 </div>
                                 <h3 class="mb-3">多圖新增</h3>
+                                <!--多圖區，將 tempProduct 中的圖片陣列讀取出來 -->
                                 <div v-if="Array.isArray(tempProduct.imagesUrl)">
                                     <div class="mb-1" v-for="(image,key) in tempProduct.imagesUrl" :key="key">
                                         <div class="mb-3">
@@ -99,10 +101,11 @@
                                         </div>
                                         <img class="img-fluid" :src="image">
                                     </div>
+                                    <!--根據多圖陣列長度、內容，切換顯示新增圖片、刪除圖片-->
                                     <div
                                         v-if="!tempProduct.imagesUrl.length || tempProduct.imagesUrl[tempProduct.imagesUrl.length - 1]">
                                         <button class="btn btn-outline-primary btn-sm d-block w-100"
-                                            @click="createImage">
+                                            @click="createImages">
                                             新增圖片
                                         </button>
                                     </div>
@@ -113,9 +116,10 @@
                                         </button>
                                     </div>
                                 </div>
+                                <!--存放多圖網址的變數若未初始化為陣列則使顯示此區塊 -->
                                 <div v-else>
                                     <button class="btn btn-outline-primary btn-sm d-block w-100"
-                                        @click="createImage('init')">
+                                        @click="createImages('init')">
                                         新增圖片
                                     </button>
                                 </div>
