@@ -41,12 +41,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(product) in products">
-                        <td>{{product.category}}</td> <!--分類-->
-                        <td>{{product.title}}</td><!--產品名稱-->
-                        <td class="text-end">{{product.origin_price}}</td><!--原價-->
-                        <td class="text-end">{{product.price}}</td><!--售價-->
-                        <td><!--是否啟用-->
+                    <tr v-for="(product) in products" :key="product.id">
+                        <!--分類-->
+                        <td>{{product.category}}</td>
+                        <!--產品名稱-->
+                        <td>{{product.title}}</td>
+                        <!--原價-->
+                        <td class="text-end">{{product.origin_price}}</td>
+                        <!--售價-->
+                        <td class="text-end">{{product.price}}</td>
+                        <!--是否啟用-->
+                        <td>
                             <span class="text-success" v-if="product.is_enabled">啟用</span>
                             <span v-else>未啟用</span>
                         </td>
@@ -90,38 +95,37 @@
                                     </div>
                                     <img class="img-fluid" :src="tempProduct.imageUrl">
                                 </div>
-                                <h3 class="mb-3">多圖新增</h3>
-                                <!--多圖區，將 tempProduct 中的圖片陣列讀取出來 -->
-                                <div v-if="Array.isArray(tempProduct.imagesUrl)">
-                                    <div class="mb-1" v-for="(image,key) in tempProduct.imagesUrl" :key="key">
-                                        <div class="mb-3">
+                                <div>
+                                    <h3 class="mb-3">多圖新增</h3>
+                                    <!--多圖區，將 tempProduct 中的圖片陣列讀取出來 -->
+                                    <template v-if="Array.isArray(tempProduct.imagesUrl)">
+                                        <div class="mb-2" v-for="(image,key) in tempProduct.imagesUrl" :key="key+'img'">
+
                                             <label for="imageUrl" class="form-label">圖片網址</label>
-                                            <input type="text" class="form-control" placeholder="請輸入圖片連結"
+                                            <input type="text" class="form-control mb-3" placeholder="請輸入圖片連結"
                                                 v-model="tempProduct.imagesUrl[key]">
+                                            <img class="img-fluid" :src="image">
                                         </div>
-                                        <img class="img-fluid" :src="image">
-                                    </div>
-                                    <!--根據多圖陣列長度、內容，切換顯示新增圖片、刪除圖片-->
-                                    <div
-                                        v-if="!tempProduct.imagesUrl.length || tempProduct.imagesUrl[tempProduct.imagesUrl.length - 1]">
+                                        <!--根據多圖陣列長度、內容，切換顯示新增圖片、刪除圖片-->
                                         <button class="btn btn-outline-primary btn-sm d-block w-100"
-                                            @click="createImages">
+                                            @click="createImages"
+                                            v-if="!tempProduct.imagesUrl.length || tempProduct.imagesUrl[tempProduct.imagesUrl.length - 1]">
                                             新增圖片
                                         </button>
-                                    </div>
-                                    <div v-else>
+
                                         <button class="btn btn-outline-danger btn-sm d-block w-100"
-                                            @click="tempProduct.imagesUrl.pop()">
+                                            @click="tempProduct.imagesUrl.pop()" v-else>
                                             刪除圖片
                                         </button>
-                                    </div>
-                                </div>
-                                <!--存放多圖網址的變數若未初始化為陣列則使顯示此區塊 -->
-                                <div v-else>
-                                    <button class="btn btn-outline-primary btn-sm d-block w-100"
-                                        @click="createImages('init')">
-                                        新增圖片
-                                    </button>
+
+                                    </template>
+                                    <!--存放多圖網址的變數若未初始化為陣列則使顯示此區塊 -->
+                                    <template v-else>
+                                        <button class="btn btn-outline-primary btn-sm d-block w-100"
+                                            @click="createImages('init')">
+                                            新增圖片
+                                        </button>
+                                    </template>
                                 </div>
                             </div>
                             <div class="col-sm-8">
@@ -147,12 +151,12 @@
                                     <div class="mb-3 col-md-6">
                                         <label for="origin_price" class="form-label">原價</label>
                                         <input id="origin_price" type="number" min="0" class="form-control"
-                                            placeholder="請輸入原價" v-model="tempProduct.origin_price">
+                                            placeholder="請輸入原價" v-model.number="tempProduct.origin_price">
                                     </div>
                                     <div class="mb-3 col-md-6">
                                         <label for="price" class="form-label">售價</label>
                                         <input id="price" type="number" min="0" class="form-control" placeholder="請輸入售價"
-                                            v-model="tempProduct.price">
+                                            v-model.number="tempProduct.price">
                                     </div>
                                 </div>
                                 <hr>
